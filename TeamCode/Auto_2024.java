@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="red multi", group="Robot")
+@Autonomous(name="Auto_2024", group="Robot")
 public class This_one_blue_multy extends LinearOpMode {
     /* Declare OpMode members. */
     private DcMotorEx         fleftDrive   = null;

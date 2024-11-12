@@ -2,7 +2,9 @@
 
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -10,6 +12,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 /*
@@ -64,7 +70,7 @@ public class Auto_2024 extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 1250;
+    static final double     DRIVE_SPEED             = 1000;
     static final double     TURN_SPEED              = 0.4;
     static final double     WHEEL_CIRCUMFERENCE_MM  = 90.0 * 3.14;
     static final double     COUNTS_PER_WHEEL_REV    = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;
@@ -143,17 +149,17 @@ public class Auto_2024 extends LinearOpMode {
         //release specimen
         //lift up arm
         encoderDrive(DRIVE_SPEED, 28, -28, 5.0);
-        turning(-33.9);
-        encoderDrive(DRIVE_SPEED, -59, 59, 5.0);
-        //turn
+        turning(-34);
+        encoderDrive(DRIVE_SPEED, -60, 60, 5.0);
+        turning(179);
         encoderDrive(DRIVE_SPEED, -49, 49, 5.0);
         //lowwer arm
         //grab specimen
         //lift arm up
         encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
-
+        turning(86);
         encoderDrive(DRIVE_SPEED, -41, 41, 5.0);
-        //turn
+        turning(84);
         encoderDrive(DRIVE_SPEED, -25, 25, 5.0);
 
 
@@ -263,32 +269,29 @@ public class Auto_2024 extends LinearOpMode {
         SparkFunOTOS.Pose2D pos = myOtos.getPosition();
         // to ensure pos.h and heading can be equilvent, rounding pos.h and heading
         // to 1 decimal place
-        heading = (double)Math.round(heading * 10d) / 10d;
-        double pos_h = (double)Math.round(pos.h * 10d) / 10d;
 
-        while (pos_h != heading){
 
-            if(pos_h > heading){
+        while ((int)pos.h != (int)heading){
+
+            if(pos.h > heading){
                 fleftDrive.setVelocity(Math.abs(DRIVE_SPEED));
                 frightDrive.setVelocity(Math.abs(DRIVE_SPEED));
                 bleftDrive.setVelocity(Math.abs(DRIVE_SPEED));
                 brightDrive.setVelocity(Math.abs(DRIVE_SPEED));
             }
 
-            else if(pos_h < heading){
+            else if(pos.h < heading){
                 fleftDrive.setVelocity(Math.abs(-DRIVE_SPEED));
                 frightDrive.setVelocity(Math.abs(-DRIVE_SPEED));
                 bleftDrive.setVelocity(Math.abs(-DRIVE_SPEED));
                 brightDrive.setVelocity(Math.abs(-DRIVE_SPEED));
             }
 
-            telemetry.addData("ext ext_pos_h:",  pos_h);
+            telemetry.addData("ext ext_pos_h:",  pos.h);
 
             pos = myOtos.getPosition();
-            pos_h = (double)Math.round(pos.h * 10d) / 10d;
 
-            telemetry.addData("new ext_pos_h:",  pos_h);
-
+            telemetry.addData("new ext_pos_h:",  pos.h);
             telemetry.update();
 
         }

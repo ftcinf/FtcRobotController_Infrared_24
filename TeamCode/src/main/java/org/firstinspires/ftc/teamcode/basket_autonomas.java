@@ -38,8 +38,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="this one red multi", group="Robot")
-public class This_one_red_multy extends LinearOpMode {
+@Autonomous(name="basket_autonomas", group="Robot")
+public class basket_autonomas extends LinearOpMode {
     /* Declare OpMode members. */
     private DcMotorEx         fleftDrive   = null;
     private DcMotorEx         frightDrive  = null;

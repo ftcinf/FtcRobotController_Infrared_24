@@ -56,9 +56,9 @@ import java.util.Locale;
  *
  * In OnBot Java, use "Add File" to add this OpMode from the list of Samples.
  */
-@Autonomous(name = "Utility: Camera Frame Capture", group = "Utility")
+@Autonomous(name = "Practicecamera", group = "Utility")
 
-public class Practicecamra extends LinearOpMode
+public class Practicecamera extends LinearOpMode
 {
     /*
      * EDIT THESE PARAMETERS AS NEEDED

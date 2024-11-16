@@ -2,11 +2,11 @@
 
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -51,9 +51,9 @@ public class This_one_blue_multy extends LinearOpMode {
     private DcMotorEx         frightDrive  = null;
     private DcMotorEx          bleftDrive   = null;
     private DcMotorEx          brightDrive  = null;
-    private DistanceSensor rDistance;
-    private DistanceSensor lDistance;
-    private DistanceSensor fDistance;
+    private DcMotorEx               lift = null;
+    private Servo               graber = null;
+    private Servo               graber2 = null;
     private SparkFunOTOS myOtos;
     private ElapsedTime     runtime = new ElapsedTime();
 
@@ -65,14 +65,15 @@ public class This_one_blue_multy extends LinearOpMode {
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
     //https://www.revrobotics.com/rev-41-1600/
-    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;
     static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 1000;
     static final double     TURN_SPEED              = 0.4;
-    static final double     WHEEL_CIRCUMFERENCE_MM  = 90.0 * 3.14;
+
+    static final double     WHEEL_CIRCUMFERENCE_MM  = 104 * 3.14;
     static final double     COUNTS_PER_WHEEL_REV    = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;
     static final double     COUNTS_PER_MM           = COUNTS_PER_WHEEL_REV / WHEEL_CIRCUMFERENCE_MM;
     //static double currentheading;
@@ -89,6 +90,9 @@ public class This_one_blue_multy extends LinearOpMode {
         bleftDrive  = hardwareMap.get(DcMotorEx .class, "motorBackLeft");
         frightDrive = hardwareMap.get(DcMotorEx .class, "motorFrontRight");
         brightDrive = hardwareMap.get(DcMotorEx .class, "motorBackRight");
+        lift = hardwareMap.get(DcMotorEx .class,"lift");
+        graber = hardwareMap.get(Servo .class,"graber");
+        graber2 = hardwareMap.get(Servo .class,"graber2");
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         SparkFunOTOS.Pose2D pos = myOtos.getPosition();
         configureOtos();
@@ -104,8 +108,8 @@ public class This_one_blue_multy extends LinearOpMode {
 
         // rDistance = hardwareMap.get(DistanceSensor.class, "right_distance_sensor");
         // lDistance = hardwareMap.get(DistanceSensor.class, "left_distance_sensor");
-        // DcMotor lift = hardwareMap.dcMotor.get("lift");
-        //Servo graber = hardwareMap.servo.get("graber");
+        //lift = hardwareMap.dcMotor.get("lift");
+        // graber = hardwareMap.servo.get("graber");
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -142,47 +146,42 @@ public class This_one_blue_multy extends LinearOpMode {
         //encoderDrive(DRIVE_SPEED,  22.5,  -22.5, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
         //encoderDrive(TURN_SPEED,   12, 12, 5.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 
+        graber.setPosition(1);
+        graber2.setPosition(0);
 
-        encoderDrive(DRIVE_SPEED, -30, 30, 5.0);
+        arm_mover(DRIVE_SPEED, -20, 5.0);
+
+        encoderDrive(DRIVE_SPEED, -10, 10, 5.0);
         //from here down is in loop-ish
-        //lift.setPosition(3);
-        //graber.setPosition(3);
-        //lift.setPosition(3);
+
+        arm_mover(DRIVE_SPEED, -40, 5.0);
+
+        encoderDrive(DRIVE_SPEED, -18, 18, 5.0);
+        sleep(1000);
+        graber.setPosition(0);
+        graber2.setPosition(1);
+        sleep(1000);
         encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
-        encoderStrafe(DRIVE_SPEED, 20, -20, 5.0);
-        // turning(-33);
-        encoderDrive(DRIVE_SPEED, -63, 63, 5.0);
-        encoderStrafe(DRIVE_SPEED, 5, -5, 5.0);
-        //turning(179);
-        encoderDrive(DRIVE_SPEED, 55, -55, 5.0);
-        //lift.setPosition(3);
-        //graber.setPosition(3);
-        //lift.setPosition(3);
-        encoderDrive(DRIVE_SPEED, 15, -15, 5.0);
-        turning(86);
-        encoderDrive(DRIVE_SPEED, -41, 41, 5.0);
-        turning(0);
-        encoderDrive(DRIVE_SPEED, -3, 3, 5.0);
+        //NEEDS TO BE FINALIZED
+        //   turning(-45);
+        //  encoderDrive(DRIVE_SPEED, -63, 63, 5.0);
+        // turning(-154);
+        // encoderDrive(DRIVE_SPEED, -55, 55, 5.0);
+        // encoderStrafe(DRIVE_SPEED, 10, -10, 5.0);
+
+        // arm_mover(DRIVE_SPEED,-20,5.0);
+        // encoderStrafe(DRIVE_SPEED, -10, 10, 5.0);
+        //  graber.setPosition(1);
+        // graber2.setPosition(0);
+        // arm_mover(DRIVE_SPEED,-20,5.0);
+        // encoderDrive(DRIVE_SPEED, 15, -15, 5.0);
+        // turning(90);
+        // encoderDrive(DRIVE_SPEED, -41, 41, 5.0);
+        // turning(0);
 
 
-//     //second time trogh
-//     //from here down is in loop-ish
-//     //lift.setPosition(3);
-//     //graber.setPosition(3);
-//     //lift.setPosition(3);
-//     encoderDrive(DRIVE_SPEED, 28, -28, 5.0);
-//     turning(-34);
-//     encoderDrive(DRIVE_SPEED, -65, 65, 5.0);
-//     turning(179);
-//     encoderDrive(DRIVE_SPEED, -55, 55, 5.0);
-//     //lift.setPosition(3);
-//     //graber.setPosition(3);
-//     //lift.setPosition(3);
-//     encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
-//     turning(86);
-//     encoderDrive(DRIVE_SPEED, -41, 41, 5.0);
-//     turning(84);
-//     encoderDrive(DRIVE_SPEED, -3, 3, 5.0);
+
+
 
 // //to turn left both need to be negitive
 // //to turn right both need to be positive
@@ -347,6 +346,57 @@ public class This_one_blue_multy extends LinearOpMode {
             frightDrive.setVelocity(TPS);
             bleftDrive.setVelocity(TPS);
             brightDrive.setVelocity(TPS);
+
+
+            // Turn off RUN_TO_POSITION
+            fleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            bleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            brightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+            sleep(250);   // optional pause after each move.
+
+
+
+        }
+    }
+    public void arm_mover (double speed,
+                           double liftInches,
+                           double timeoutS) {
+
+
+        double TPS = (537.7/ 60) * COUNTS_PER_WHEEL_REV;
+
+        // Ensure that the OpMode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            int currentarmposition = lift.getCurrentPosition() + (int)(liftInches * COUNTS_PER_INCH);
+
+            lift.setTargetPosition(currentarmposition);
+
+            // Turn On RUN_TO_POSITION
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            telemetry.addData("speed",speed);
+            telemetry.update();
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            lift.setVelocity(Math.abs(speed));
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
+            // Stop all motion;
+
+            lift.setVelocity(TPS);
 
 
             // Turn off RUN_TO_POSITION

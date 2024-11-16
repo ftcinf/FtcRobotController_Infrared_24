@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  */
 @Autonomous(name = "Sensor: SparkFun OTOS", group = "Sensor")
 
-public class Delete_Me extends LinearOpMode {
+public class sparkfun_Otos extends LinearOpMode {
     // Create an instance of the sensor
     SparkFunOTOS myOtos;
 

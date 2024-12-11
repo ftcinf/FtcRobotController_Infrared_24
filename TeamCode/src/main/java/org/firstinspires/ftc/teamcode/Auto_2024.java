@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -14,9 +13,7 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+import com.qualcomm.robotcore.hardware.AnalogInput;
 
 /*
  * This OpMode illustrates the concept of driving a path based on encoder counts.
@@ -56,7 +53,7 @@ public class This_one_blue_multy extends LinearOpMode {
     private Servo               graber2 = null;
     private SparkFunOTOS myOtos;
     private ElapsedTime     runtime = new ElapsedTime();
-
+    private AnalogInput  potentiometer;
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -94,8 +91,10 @@ public class This_one_blue_multy extends LinearOpMode {
         graber = hardwareMap.get(Servo .class,"graber");
         graber2 = hardwareMap.get(Servo .class,"graber2");
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        potentiometer = hardwareMap.get(AnalogInput.class, "potentiometer");
         SparkFunOTOS.Pose2D pos = myOtos.getPosition();
         configureOtos();
+
         //currentheading = pos.h;
 
 
@@ -146,28 +145,30 @@ public class This_one_blue_multy extends LinearOpMode {
         //encoderDrive(DRIVE_SPEED,  22.5,  -22.5, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
         //encoderDrive(TURN_SPEED,   12, 12, 5.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 
+        arm_mover(DRIVE_SPEED, 5, 5.0,4);
         graber.setPosition(1);
         graber2.setPosition(0);
 
-        arm_mover(DRIVE_SPEED, -20, 5.0);
+        arm_mover(DRIVE_SPEED, -20, 5.0,4);
 
         encoderDrive(DRIVE_SPEED, -10, 10, 5.0);
         //from here down is in loop-ish
 
-        arm_mover(DRIVE_SPEED, -40, 5.0);
-
-        encoderDrive(DRIVE_SPEED, -18, 18, 5.0);
+        arm_mover(DRIVE_SPEED, -43, 5.0,4);
+        sleep(1000);
+        encoderDrive(DRIVE_SPEED, -15, 15, 5.0);
         sleep(1000);
         graber.setPosition(0);
         graber2.setPosition(1);
         sleep(1000);
         encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
         //NEEDS TO BE FINALIZED
-        //   turning(-45);
-        //  encoderDrive(DRIVE_SPEED, -63, 63, 5.0);
-        // turning(-154);
-        // encoderDrive(DRIVE_SPEED, -55, 55, 5.0);
-        // encoderStrafe(DRIVE_SPEED, 10, -10, 5.0);
+        turning(-40);
+        arm_mover(DRIVE_SPEED, 63, 5.0,4);
+        encoderDrive(DRIVE_SPEED, -45, 45, 5.0);
+        turning(-175);
+        encoderDrive(DRIVE_SPEED, -55, 55, 5.0);
+        encoderDrive(DRIVE_SPEED, 10, -10, 5.0);
 
         // arm_mover(DRIVE_SPEED,-20,5.0);
         // encoderStrafe(DRIVE_SPEED, -10, 10, 5.0);
@@ -363,6 +364,7 @@ public class This_one_blue_multy extends LinearOpMode {
     }
     public void arm_mover (double speed,
                            double liftInches,
+                           double volts,
                            double timeoutS) {
 
 
@@ -373,12 +375,21 @@ public class This_one_blue_multy extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             int currentarmposition = lift.getCurrentPosition() + (int)(liftInches * COUNTS_PER_INCH);
-
+            double potentiometer_position = potentiometer.getVoltage();
             lift.setTargetPosition(currentarmposition);
 
             // Turn On RUN_TO_POSITION
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+            if (potentiometer_position >volts) {
+                //down
+                lift.setVelocity(Math.abs(speed));
+            }
+            else if(potentiometer_position <volts){
+                lift.setVelocity(Math.abs(-speed));
+            }
+            else{
+                lift.setVelocity(Math.abs(0));
+            }
             telemetry.addData("speed",speed);
             telemetry.update();
 

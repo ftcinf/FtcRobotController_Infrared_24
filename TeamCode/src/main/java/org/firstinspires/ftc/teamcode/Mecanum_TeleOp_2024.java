@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class Mecanum_TeleOp_2024 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+        //hello!!!!!!!! my name is maddie !!!!!!!!!!!!!!!:):):):):):):):) hi !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hi dad do you see this????????????????????????????? hi !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // Declare our motors
         // Make sure your ID's match your configuration
 

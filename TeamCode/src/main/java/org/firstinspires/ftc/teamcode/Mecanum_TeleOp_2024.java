@@ -68,34 +68,29 @@ public class Mecanum_TeleOp_2024 extends LinearOpMode {
                 drone.setPosition(-10);
                 Thread.sleep(1000);
                 drone.setPosition(3);
-            }
+                }
             if (gamepad1.left_bumper){
                 claw.setPosition(-10);
                 claw.setPosition(10);
-            }
-
+                }
             if (gamepad1.right_bumper){
                 //hook.setPosition(3);
                 //Thread.sleep(1000);
                 // hook.setPosition(-1);
                 lhook.setPower(.5);
-
-            }
+                }
             if (gamepad1.b){
                 graber.setPosition(1);
-            }
+                }
             if (gamepad1.x){
                 graber.setPosition(-.5);
-            }
+                }
             if (gamepad1.left_trigger>0){
                 lhook.setPower(10);
-            }
-
-
-
+                }
             if (gamepad1.right_trigger>0){
                 lhook.setPower(-.5);
-            }
+                }
             else{
                 lhook.setPower(0);
 

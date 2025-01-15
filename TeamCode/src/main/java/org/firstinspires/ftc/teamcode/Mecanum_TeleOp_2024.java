@@ -58,15 +58,12 @@ public class Mecanum_TeleOp_2024 extends LinearOpMode {
             motorBackRight.setPower(backRightPower*driveSpeed);
             if (gamepad1.y){
                 lift.setPower(-1);
-
             }
             if (gamepad1.a){
                 lift.setPower(1);
-
             }
             else{
                 lift.setPower(0);
-
             }
             if (gamepad1.left_bumper){
                 drone.setPosition(-10);

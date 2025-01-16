@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 
 @TeleOp
 public class Mecanum_TeleOp_2024 extends LinearOpMode {
+
     @Override
     public void runOpMode() throws InterruptedException {
         /*
@@ -18,7 +19,7 @@ public class Mecanum_TeleOp_2024 extends LinearOpMode {
          Make sure your ID's match your configuration
         */
 
-        DcMotor lhook= hardwareMap.dcMotor.get("lhook");
+
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
@@ -26,10 +27,11 @@ public class Mecanum_TeleOp_2024 extends LinearOpMode {
         DcMotor lift = hardwareMap.dcMotor.get("lift");
 
         //DcMotor rightLift = hardwareMap.dcMotor.get("rightLift");
-        Servo drone = hardwareMap.servo.get("drone");
-        Servo hook = hardwareMap.servo.get("hook");
-        Servo claw = hardwareMap.servo.get("claw");
+
+
+
         Servo graber = hardwareMap.servo.get("graber");
+        Servo graber2 = hardwareMap.servo.get("graber2");
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -59,44 +61,30 @@ public class Mecanum_TeleOp_2024 extends LinearOpMode {
             motorBackLeft.setPower(backLeftPower*driveSpeed);
             motorFrontRight.setPower(frontRightPower*driveSpeed);
             motorBackRight.setPower(backRightPower*driveSpeed);
-            if (gamepad1.y){
+            if (gamepad2.y){
                 lift.setPower(-1);
             }
-            if (gamepad1.a){
+            if (gamepad2.a){
                 lift.setPower(1);
             }
             else{
                 lift.setPower(0);
             }
-            if (gamepad1.left_bumper){
-                drone.setPosition(-10);
-                Thread.sleep(1000);
-                drone.setPosition(3);
-                }
-            if (gamepad1.left_bumper){
-                claw.setPosition(-10);
-                claw.setPosition(10);
-                }
-            if (gamepad1.right_bumper){
-                //hook.setPosition(3);
-                //Thread.sleep(1000);
-                // hook.setPosition(-1);
-                lhook.setPower(.5);
-                }
+
+
+
+
             if (gamepad1.b){
                 graber.setPosition(1);
-                }
+                graber2.setPosition(0);
+            }
             if (gamepad1.x){
-                graber.setPosition(-.5);
-                }
-            if (gamepad1.left_trigger>0){
-                lhook.setPower(10);
-                }
-            if (gamepad1.right_trigger>0){
-                lhook.setPower(-.5);
-                }
-            else{
-                lhook.setPower(0);
+                graber.setPosition(0);
+                graber2.setPosition(1);
+            }
+
+
+
 
 
             }

@@ -147,8 +147,8 @@ public class TestTelop extends LinearOpMode {
 
             // Turn off RUN_TO_POSITION
 
-            sleep(3000);
-            // lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             sleep(250);   // optional pause after each move.
             telemetry.addData("exited","while loop");

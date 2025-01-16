@@ -47,8 +47,8 @@ public class Auto_2024 extends LinearOpMode {
     private DcMotorEx         fleftDrive   = null;
     private DcMotorEx         frightDrive  = null;
     private DcMotorEx          bleftDrive   = null;
-    private DcMotorEx          brightDrive  = null;
-    private DcMotorEx               lift = null;
+    private DcMotorEx       brightDrive  = null;
+    private DcMotorEx       lift = null;
     private Servo               graber = null;
     private Servo               graber2 = null;
     private SparkFunOTOS myOtos;

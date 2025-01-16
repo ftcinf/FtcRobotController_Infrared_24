@@ -444,10 +444,15 @@ public class Auto_2024 extends LinearOpMode {
                     telemetry.addData("right", "position");
                     lift.setPower(0);
                 }
-                //s stores our rounded decimal but as a string
+
+                //Check if lift has finished moving
+                //if lift has not finished moving, the potentiometer reading
+                //will be out of sync with currentarmposition
+                //This will the currentarmposition to be set to nonsensical levels
                 while (lift.isBusy()){
                     telemetry.addData("Lift is still moving... ", lift.isBusy());
                 }
+                //s stores our rounded decimal but as a string
                 String s = df.format(potentiometer.getVoltage());
                 //Convert s string into dObj Double Value
                 Double dObj = Double.valueOf(s);

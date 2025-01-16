@@ -448,7 +448,6 @@ public class Auto_2024 extends LinearOpMode {
                     lift.setPower(0);
                 }
                 //s stores our rounded decimal but as a string
-                lift.isBusy()
                 String s = df.format(potentiometer.getVoltage());
                 //Convert s string into dObj Double Value
                 Double dObj = Double.valueOf(s);

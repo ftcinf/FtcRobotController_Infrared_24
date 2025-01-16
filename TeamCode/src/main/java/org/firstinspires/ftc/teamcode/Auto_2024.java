@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,6 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+
+import java.text.DecimalFormat;
 
 /*
  * This OpMode illustrates the concept of driving a path based on encoder counts.
@@ -53,6 +56,7 @@ public class Auto_2024 extends LinearOpMode {
     private Servo               graber2 = null;
     private SparkFunOTOS myOtos;
     private ElapsedTime     runtime = new ElapsedTime();
+    private DigitalChannel touchSensor;
     private AnalogInput  potentiometer;
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -170,15 +174,15 @@ public class Auto_2024 extends LinearOpMode {
         encoderDrive(DRIVE_SPEED, -55, 55, 5.0);
         encoderDrive(DRIVE_SPEED, 10, -10, 5.0);
 
-        // arm_mover(DRIVE_SPEED,-20,5.0);
-        // encoderStrafe(DRIVE_SPEED, -10, 10, 5.0);
-        //  graber.setPosition(1);
-        // graber2.setPosition(0);
-        // arm_mover(DRIVE_SPEED,-20,5.0);
-        // encoderDrive(DRIVE_SPEED, 15, -15, 5.0);
-        // turning(90);
-        // encoderDrive(DRIVE_SPEED, -41, 41, 5.0);
-        // turning(0);
+         arm_mover(DRIVE_SPEED,-20,5.0);
+         encoderStrafe(DRIVE_SPEED, -10, 10, 5.0);
+          graber.setPosition(1);
+         graber2.setPosition(0);
+         arm_mover(DRIVE_SPEED,-20,5.0);
+         encoderDrive(DRIVE_SPEED, 15, -15, 5.0);
+         turning(90);
+         encoderDrive(DRIVE_SPEED, -41, 41, 5.0);
+         turning(0);
 
 
 
@@ -362,67 +366,109 @@ public class Auto_2024 extends LinearOpMode {
 
         }
     }
-    public void arm_mover (double speed,
-                           double liftInches,
-                           double volts,
-                           double timeoutS) {
+    public void arm_mover (
+            double liftInches,
+            double volts,
+            double timeoutS
+            //double volts
+    ) {
+        // the number 537.7 means,
 
+        final double     COUNTS_PER_INCH         = (537.7 * 1.0) /
+                (4 * 3.1415);
 
-        double TPS = (537.7/ 60) * COUNTS_PER_WHEEL_REV;
+        telemetry.addData( "counts per inch ",COUNTS_PER_INCH);
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            int currentarmposition = lift.getCurrentPosition() + (int)(liftInches * COUNTS_PER_INCH);
-            double potentiometer_position = potentiometer.getVoltage();
+            int currentarmposition = lift.getCurrentPosition() + (int) (liftInches * COUNTS_PER_INCH);
+            //double potentiometer_position = potentiometer.getVoltage();
+            // lift.setTargetPosition(currentarmposition);
+            lift.setPower(.5);
             lift.setTargetPosition(currentarmposition);
 
+            telemetry.addData("the intialized position ", lift.getCurrentPosition());
+            telemetry.addData("the current arm position = ", currentarmposition);
+            telemetry.addData("desierd arm posiotion is,", liftInches);
+
             // Turn On RUN_TO_POSITION
+
+            telemetry.addData("the current arm position = ", currentarmposition);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (potentiometer_position >volts) {
-                //down
-                lift.setVelocity(Math.abs(speed));
+            runtime.reset();
+
+
+            // telemetry.addData("Potentiometer voltage",potentiometer.getVoltage());
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (lift.isBusy())) {
+
+                telemetry.update();
             }
-            else if(potentiometer_position <volts){
-                lift.setVelocity(Math.abs(-speed));
-            }
-            else{
-                lift.setVelocity(Math.abs(0));
-            }
-            telemetry.addData("speed",speed);
-            telemetry.update();
+
+            lift.setPower(0);
 
             // reset the timeout time and start motion.
-            runtime.reset();
-            lift.setVelocity(Math.abs(speed));
-
-
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-
             // Stop all motion;
+            int counter = 0;
+            // Double valueOf(String s);
 
-            lift.setVelocity(TPS);
+            double currentVoltage = potentiometer.getVoltage();
+            // there was a 'public static' behind the 'final' but getting rid of them solved a error
+            final DecimalFormat df = new DecimalFormat("0.00");
 
+            while (currentVoltage != volts && touchSensor.getState() == true) {
+
+                telemetry.addData("touch sensor state", touchSensor.getState());
+                telemetry.addData("loop count ", counter);
+                counter += 1;
+                if (currentVoltage < volts) {
+                    //up
+                    telemetry.addData("up", "");
+                    lift.setPower(.1);
+                    currentarmposition = currentarmposition - 1;
+                    lift.setTargetPosition(currentarmposition);
+                } else if (currentVoltage > volts) {
+                    //down
+                    telemetry.addData("down", "");
+                    lift.setPower(-.1);
+                    currentarmposition = currentarmposition + 1;
+                    lift.setTargetPosition(currentarmposition);
+
+                } else {
+                    telemetry.addData("right", "position");
+                    lift.setPower(0);
+                }
+                //s stores our rounded decimal but as a string
+                String s = df.format(potentiometer.getVoltage());
+                //Convert s string into dObj Double Value
+                Double dObj = Double.valueOf(s);
+                currentVoltage = dObj.doubleValue();
+                telemetry.addData("the current arm position = ", currentVoltage);
+                telemetry.addData("the desiered arm position = ", volts);
+                telemetry.addData("the current arm position = ", currentarmposition);
+                telemetry.update();
+
+            }
 
             // Turn off RUN_TO_POSITION
-            fleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            bleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            brightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
+            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.
-
-
-
+            telemetry.addData("exited", "while loop");
+            telemetry.update();
         }
-    }
+        }
     public void turning(double heading){
         SparkFunOTOS.Pose2D pos = myOtos.getPosition();
         // to ensure pos.h and heading can be equilvent, rounding pos.h and heading

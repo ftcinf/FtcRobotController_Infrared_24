@@ -274,18 +274,13 @@ public class Auto_2024 extends LinearOpMode {
             bleftDrive.setVelocity(TPS);
             brightDrive.setVelocity(TPS);
 
-
             // Turn off RUN_TO_POSITION
             fleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             bleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             brightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
             sleep(250);   // optional pause after each move.
-
-
-
         }
     }
 
@@ -432,6 +427,8 @@ public class Auto_2024 extends LinearOpMode {
                 counter += 1;
                 if (currentVoltage < volts) {
                     //up
+                    if currentarmposition
+
                     telemetry.addData("up", "");
                     lift.setPower(.1);
                     currentarmposition = currentarmposition - 1;
@@ -448,6 +445,9 @@ public class Auto_2024 extends LinearOpMode {
                     lift.setPower(0);
                 }
                 //s stores our rounded decimal but as a string
+                while (lift.isBusy()){
+                    telemetry.addData("Lift is still moving... ", lift.isBusy());
+                }
                 String s = df.format(potentiometer.getVoltage());
                 //Convert s string into dObj Double Value
                 Double dObj = Double.valueOf(s);

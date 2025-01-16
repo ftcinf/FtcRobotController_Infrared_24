@@ -84,8 +84,6 @@ public class Auto_2024 extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-
-
         // Initialize the drive system variables.
         fleftDrive  = hardwareMap.get(DcMotorEx .class, "motorFrontLeft");
         bleftDrive  = hardwareMap.get(DcMotorEx .class, "motorBackLeft");
@@ -100,12 +98,6 @@ public class Auto_2024 extends LinearOpMode {
         configureOtos();
 
         //currentheading = pos.h;
-
-
-
-
-
-
 
         // fDistance = hardwareMap.get(DistanceSensor.class, "front_distance_sensor");
 
@@ -347,17 +339,13 @@ public class Auto_2024 extends LinearOpMode {
             bleftDrive.setVelocity(TPS);
             brightDrive.setVelocity(TPS);
 
-
             // Turn off RUN_TO_POSITION
             fleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             bleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             brightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
             sleep(250);   // optional pause after each move.
-
-
 
         }
     }
@@ -425,25 +413,33 @@ public class Auto_2024 extends LinearOpMode {
                 telemetry.addData("touch sensor state", touchSensor.getState());
                 telemetry.addData("loop count ", counter);
                 counter += 1;
+                //pot_difference allows us to scale how fast the arm
+                //moves into position based on how far away the currentvoltage is
+                //from the desired voltage
+                double pot_difference = (volts - currentVoltage)/volts;
+                //We are multiply by 100 because it will give us
+                //reasonable amounts of ticks to move the arm
+                //AND it is easy to do the math in our heads.
+                int ticks_to_move_arm = (int) (100 * pot_difference);
+
                 if (currentVoltage < volts) {
                     //up
-                    if currentarmposition
-
                     telemetry.addData("up", "");
-                    lift.setPower(.1);
-                    currentarmposition = currentarmposition - 1;
+                    lift.setPower(.7);
+                    currentarmposition = currentarmposition - ticks_to_move_arm;
                     lift.setTargetPosition(currentarmposition);
-                } else if (currentVoltage > volts) {
+                    }
+                else if (currentVoltage > volts) {
                     //down
                     telemetry.addData("down", "");
-                    lift.setPower(-.1);
-                    currentarmposition = currentarmposition + 1;
+                    lift.setPower(-.7);
+                    currentarmposition = currentarmposition + ticks_to_move_arm;
                     lift.setTargetPosition(currentarmposition);
-
-                } else {
+                    }
+                else {
                     telemetry.addData("right", "position");
                     lift.setPower(0);
-                }
+                    }
 
                 //Check if lift has finished moving
                 //if lift has not finished moving, the potentiometer reading
@@ -451,18 +447,19 @@ public class Auto_2024 extends LinearOpMode {
                 //This will the currentarmposition to be set to nonsensical levels
                 while (lift.isBusy()){
                     telemetry.addData("Lift is still moving... ", lift.isBusy());
+                    telemetry.update();
                 }
                 //s stores our rounded decimal but as a string
                 String s = df.format(potentiometer.getVoltage());
                 //Convert s string into dObj Double Value
                 Double dObj = Double.valueOf(s);
                 currentVoltage = dObj.doubleValue();
-                telemetry.addData("the current arm position = ", currentVoltage);
-                telemetry.addData("the desiered arm position = ", volts);
+                telemetry.addData("the current currentVoltage = ", currentVoltage);
+                telemetry.addData("the desired volts = ", volts);
                 telemetry.addData("the current arm position = ", currentarmposition);
+                telemetry.addData("ticks_to_move_arm = ", ticks_to_move_arm);
                 telemetry.update();
-
-            }
+                }
 
             // Turn off RUN_TO_POSITION
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

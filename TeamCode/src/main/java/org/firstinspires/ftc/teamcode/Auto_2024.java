@@ -465,8 +465,6 @@ public class Auto_2024 extends LinearOpMode {
             }
 
             // Turn off RUN_TO_POSITION
-
-
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);   // optional pause after each move.

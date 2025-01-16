@@ -166,8 +166,8 @@ public class Auto_2024 extends LinearOpMode {
         graber2.setPosition(1);
         sleep(1000);
         encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
-        //NEEDS TO BE FINALIZED
-        turning(-40);
+        //NEEDS TO BE DAILED IN !!!!!!!!!!
+
         arm_mover(DRIVE_SPEED, 63, 5.0,4);
         encoderDrive(DRIVE_SPEED, -45, 45, 5.0);
         turning(-175);
@@ -448,6 +448,7 @@ public class Auto_2024 extends LinearOpMode {
                     lift.setPower(0);
                 }
                 //s stores our rounded decimal but as a string
+                lift.isBusy()
                 String s = df.format(potentiometer.getVoltage());
                 //Convert s string into dObj Double Value
                 Double dObj = Double.valueOf(s);

@@ -66,28 +66,27 @@ public class TestTelop extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            int currentarmposition = lift.getCurrentPosition() + (int)(liftInches * COUNTS_PER_INCH);
+            int currentarmposition = lift.getCurrentPosition() + (int) (liftInches * COUNTS_PER_INCH);
             //double potentiometer_position = potentiometer.getVoltage();
             // lift.setTargetPosition(currentarmposition);
             lift.setPower(.5);
             lift.setTargetPosition(currentarmposition);
 
-            telemetry.addData("the intialized position ",lift.getCurrentPosition());
-            telemetry.addData("the current arm position = ",currentarmposition);
-            telemetry.addData("desierd arm posiotion is,",liftInches);
+            telemetry.addData("the intialized position ", lift.getCurrentPosition());
+            telemetry.addData("the current arm position = ", currentarmposition);
+            telemetry.addData("desierd arm posiotion is,", liftInches);
 
             // Turn On RUN_TO_POSITION
 
-            telemetry.addData("the current arm position = ",currentarmposition);
+            telemetry.addData("the current arm position = ", currentarmposition);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             runtime.reset();
-
 
 
             // telemetry.addData("Potentiometer voltage",potentiometer.getVoltage());
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (lift.isBusy() )) {
+                    (lift.isBusy())) {
 
                 telemetry.update();
             }
@@ -109,54 +108,67 @@ public class TestTelop extends LinearOpMode {
             // there was a 'public static' behind the 'final' but getting rid of them solved a error
             final DecimalFormat df = new DecimalFormat("0.00");
 
-            while(currentVoltage != volts &&  touchSensor.getState()== true){
+            while (currentVoltage != volts && touchSensor.getState() == true) {
 
-                telemetry.addData("touch sensor state",touchSensor.getState());
-                telemetry.addData("loop count ",counter);
+                telemetry.addData("touch sensor state", touchSensor.getState());
+                telemetry.addData("loop count ", counter);
                 counter += 1;
+                //pot_difference allows us to scale how fast the arm
+                //moves into position based on how far away the currentvoltage is
+                //from the desired voltage
+                double pot_difference = (volts - currentVoltage)/volts;
+                //We are multiply by 100 because it will give us
+                //reasonable amounts of ticks to move the arm
+                //AND it is easy to do the math in our heads.
+                int ticks_to_move_arm = (int) (200 * pot_difference);
+
                 if (currentVoltage < volts) {
                     //up
-                    telemetry.addData("up","");
-                    lift.setPower(.1);
-                    currentarmposition = currentarmposition - 1;
+                    telemetry.addData("up", "");
+                    lift.setPower(.7);
+                    currentarmposition = currentarmposition - ticks_to_move_arm;
                     lift.setTargetPosition(currentarmposition);
                 }
-                else if(currentVoltage > volts){
+                else if (currentVoltage > volts) {
                     //down
-                    telemetry.addData("down","");
-                    lift.setPower(-.1);
-                    currentarmposition = currentarmposition + 1;
+                    telemetry.addData("down", "");
+                    lift.setPower(-.7);
+                    currentarmposition = currentarmposition + ticks_to_move_arm;
                     lift.setTargetPosition(currentarmposition);
-
                 }
-                else{
-                    telemetry.addData("right","position");
+                else {
+                    telemetry.addData("right", "position");
                     lift.setPower(0);
+                }
+
+                //Check if lift has finished moving
+                //if lift has not finished moving, the potentiometer reading
+                //will be out of sync with currentarmposition
+                //This will the currentarmposition to be set to nonsensical levels
+                while (lift.isBusy()){
+                    // telemetry.addData("Lift is still moving... ", lift.isBusy());
+                    // telemetry.update();
                 }
                 //s stores our rounded decimal but as a string
                 String s = df.format(potentiometer.getVoltage());
                 //Convert s string into dObj Double Value
                 Double dObj = Double.valueOf(s);
                 currentVoltage = dObj.doubleValue();
-                telemetry.addData("the current arm position = ",currentVoltage);
-                telemetry.addData("the desiered arm position = ",volts);
-                telemetry.addData("the current arm position = ",currentarmposition);
+                telemetry.addData("the current currentVoltage = ", currentVoltage);
+                telemetry.addData("the desired volts = ", volts);
+                telemetry.addData("the current arm position = ", currentarmposition);
+                telemetry.addData("ticks_to_move_arm = ", ticks_to_move_arm);
                 telemetry.update();
-
             }
 
             // Turn off RUN_TO_POSITION
-
-
-            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            sleep(250);   // optional pause after each move.
-            telemetry.addData("exited","while loop");
+            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+            lift.setPower(0);
+            // optional pause after each move.
+            telemetry.addData("exited", "while loop");
             telemetry.update();
-
         }
     }
-
 }
 
 

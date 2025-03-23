@@ -45,7 +45,7 @@ import java.math.RoundingMode;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="THE AUTO", group="Robot")
+@Autonomous(name="2 specimen auto", group="Robot")
 public class This_one_blue_multy extends LinearOpMode {
     /* Declare OpMode members. */
     private DcMotorEx         fleftDrive   = null;
@@ -72,8 +72,8 @@ public class This_one_blue_multy extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 1000;
-    static final double     TURN_SPEED              = 0.4;
+    static final double     DRIVE_SPEED             = 1500;
+    static final double     TURN_SPEED              = 750;
 
     static final double     WHEEL_CIRCUMFERENCE_MM  = 104 * 3.14;
     static final double     COUNTS_PER_WHEEL_REV    = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;
@@ -101,6 +101,11 @@ public class This_one_blue_multy extends LinearOpMode {
         SparkFunOTOS.Pose2D pos = myOtos.getPosition();
         configureOtos();
 
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fleftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bleftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        brightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //currentheading = pos.h;
 
 
@@ -152,48 +157,85 @@ public class This_one_blue_multy extends LinearOpMode {
         //encoderDrive(TURN_SPEED,   12, 12, 5.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 
 
-        graber.setPosition(1);
-        graber2.setPosition(0);
 
-        arm_mover(-20, .54,.5);
 
-        encoderDrive(DRIVE_SPEED, -10, 10, 5.0);
-        //from here down is in loop-ish
-
-        arm_mover(-43, .97,.5);
-        sleep(1000);
-        encoderDrive(DRIVE_SPEED, -15, 15, 5.0);
-        sleep(1000);
         graber.setPosition(0);
         graber2.setPosition(1);
-        sleep(1000);
-        encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
 
-        // arm_mover(40, .24,.5);
+        arm_mover(200,.96,.5);
 
+        encoderDrive(DRIVE_SPEED, -30, 30, 5.0);
+        //from here down in loop-ish
+        arm_mover(-150,10,.5);
 
+        //sleep(1000);
 
-        //NONE OF THE NUBERS ARE RIGHT!
-        encoderStrafe(DRIVE_SPEED, -45, 45, 5.0);
-        //arm_mover(63, 5.0,4);
-        encoderDrive(DRIVE_SPEED, -45, 45, 5.0);
-        turning(-175);
-        encoderDrive(DRIVE_SPEED, -55, 55, 5.0);
-        encoderDrive(DRIVE_SPEED, 10, -10, 5.0);
-
-        arm_mover(DRIVE_SPEED,-20,5.0);
-        encoderDrive(DRIVE_SPEED, -10, 10, 5.0);
+        //sleep(1000);
         graber.setPosition(1);
         graber2.setPosition(0);
-        arm_mover(DRIVE_SPEED,-20,5.0);
-        encoderDrive(DRIVE_SPEED, 15, -15, 5.0);
+        // sleep(1000);
+        encoderDrive(DRIVE_SPEED, 20, -20, 5.0);
+
+        //arm_mover(-80, 10,.5);
+
+        //.96=bar
+        //.48=wall
+        //.37=resting
+
+        //second specimen
+        encoderStrafe(DRIVE_SPEED, 35, -35, 5.0);//
+
+
+        encoderDrive(DRIVE_SPEED, -30, 30, 5.0);//D
+
+        turning(-175);
+        arm_mover(-100,10,5.0);
+        encoderDrive(DRIVE_SPEED, -35, 35, 5.0);//
+
+
+        encoderDrive(DRIVE_SPEED, 10, -10, 5.0);//D
+
+
+        arm_mover(0,.48,5.0);
+        encoderDrive(DRIVE_SPEED, -5, 5, 5.0);//
+
+        graber.setPosition(0);
+        graber2.setPosition(1);
+        arm_mover(80,.96,5.0);
+        encoderDrive(DRIVE_SPEED, 10, -10, 5.0);//
+
         turning(90);
-        encoderDrive(DRIVE_SPEED, -41, 41, 5.0);
+        encoderDrive(DRIVE_SPEED, -30, 30, 5.0);//
+
         turning(0);
 
+        encoderDrive(DRIVE_SPEED, -20, 20, 5.0);//
+
+        arm_mover(-80,10,5.0);
         //to turn left both need to be negitive
         //to turn right both need to be positive
 
+        //3RD SPECIMEN
+        //NOT READY
+        //THE NUMBERS ARE NOT READY
+
+        // encoderStrafe(DRIVE_SPEED, -41, 41, 5.0);
+
+        // encoderDrive(DRIVE_SPEED, -47, 47, 5.0);
+        // turning(-175);
+        // encoderDrive(DRIVE_SPEED, -55, 55, 5.0);
+        // encoderDrive(DRIVE_SPEED, 10, -10, 5.0);
+
+        // arm_mover(-20,.37,5.0);
+        // encoderDrive(DRIVE_SPEED, -10, 10, 5.0);
+        //  graber.setPosition(1);
+        // graber2.setPosition(0);
+        // arm_mover(-43,.79,5.0);
+        // encoderDrive(DRIVE_SPEED, 20, -20, 5.0);
+        // turning(90);
+        // encoderDrive(DRIVE_SPEED, -47, 47, 5.0);
+        // turning(0);
+        // encoderDrive(DRIVE_SPEED, -20, 20, 5.0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -218,21 +260,23 @@ public class This_one_blue_multy extends LinearOpMode {
                              double leftInches,
                              double rightInches,
                              double timeoutS) {
-        int newLeftTarget = (int)(610 * COUNTS_PER_MM);
-        int newRightTarget = (int)(610 * COUNTS_PER_MM);
+        int newfrontLeftTarget = (int)(610 * COUNTS_PER_MM);
+        int  newfrontRightTarget = (int)(610 * COUNTS_PER_MM);
+        int  newbackLeftTarget   = (int)(610 * COUNTS_PER_MM);
+        int newbackRightTarget = (int)(610 * COUNTS_PER_MM);
         double TPS = (537.7/ 60) * COUNTS_PER_WHEEL_REV;
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = fleftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = frightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            newLeftTarget = bleftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = brightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            fleftDrive.setTargetPosition(newLeftTarget);
-            frightDrive.setTargetPosition(newRightTarget);
-            bleftDrive.setTargetPosition(newLeftTarget);
-            brightDrive.setTargetPosition(newRightTarget);
+            newfrontLeftTarget = fleftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newfrontRightTarget = frightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newbackLeftTarget = bleftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newbackRightTarget = brightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            fleftDrive.setTargetPosition(newfrontLeftTarget);
+            frightDrive.setTargetPosition(newfrontRightTarget);
+            bleftDrive.setTargetPosition( newbackLeftTarget);
+            brightDrive.setTargetPosition(newbackRightTarget);
 
             // Turn On RUN_TO_POSITION
             fleftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -262,7 +306,7 @@ public class This_one_blue_multy extends LinearOpMode {
                     (fleftDrive.isBusy() && frightDrive.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Running to",  " %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Running to",  " %7d :%7d", newbackRightTarget,  newbackRightTarget);
                 telemetry.addData("Currently at",  " at %7d :%7d",
                         fleftDrive.getCurrentPosition(), frightDrive.getCurrentPosition());
                 telemetry.update();
@@ -386,7 +430,8 @@ public class This_one_blue_multy extends LinearOpMode {
             int currentarmposition = lift.getCurrentPosition() + (int) (liftInches * COUNTS_PER_INCH);
             //double potentiometer_position = potentiometer.getVoltage();
             // lift.setTargetPosition(currentarmposition);
-            lift.setPower(.5);
+            lift.setPower(1);
+
             lift.setTargetPosition(currentarmposition);
 
             telemetry.addData("the intialized position ", lift.getCurrentPosition());
@@ -425,7 +470,7 @@ public class This_one_blue_multy extends LinearOpMode {
             // there was a 'public static' behind the 'final' but getting rid of them solved a error
             final DecimalFormat df = new DecimalFormat("0.00");
 
-            while (currentVoltage != volts && touchSensor.getState() == true) {
+            while (currentVoltage != volts && touchSensor.getState() == true && volts != 10) {
 
                 telemetry.addData("touch sensor state", touchSensor.getState());
                 telemetry.addData("loop count ", counter);
@@ -437,20 +482,22 @@ public class This_one_blue_multy extends LinearOpMode {
                 //We are multiply by 100 because it will give us
                 //reasonable amounts of ticks to move the arm
                 //AND it is easy to do the math in our heads.
-                int ticks_to_move_arm = (int) (200 * pot_difference);
+                int ticks_to_move_arm = (int) (400 * pot_difference);
 
                 if (currentVoltage < volts) {
                     //up
                     telemetry.addData("up", "");
-                    lift.setPower(.5);
-                    currentarmposition = currentarmposition - ticks_to_move_arm;
+                    currentarmposition = currentarmposition +ticks_to_move_arm;
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(.8);
                     lift.setTargetPosition(currentarmposition);
                 }
                 else if (currentVoltage > volts) {
                     //down
                     telemetry.addData("down", "");
-                    lift.setPower(-.5);
                     currentarmposition = currentarmposition + ticks_to_move_arm;
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(.8);
                     lift.setTargetPosition(currentarmposition);
                 }
                 else {
@@ -495,17 +542,17 @@ public class This_one_blue_multy extends LinearOpMode {
         while ((int)pos.h != (int)heading){
 
             if(pos.h > heading){
-                fleftDrive.setVelocity(Math.abs(DRIVE_SPEED));
-                frightDrive.setVelocity(Math.abs(DRIVE_SPEED));
-                bleftDrive.setVelocity(Math.abs(DRIVE_SPEED));
-                brightDrive.setVelocity(Math.abs(DRIVE_SPEED));
+                fleftDrive.setVelocity(Math.abs(TURN_SPEED));
+                frightDrive.setVelocity(Math.abs(TURN_SPEED));
+                bleftDrive.setVelocity(Math.abs(TURN_SPEED));
+                brightDrive.setVelocity(Math.abs(TURN_SPEED));
             }
 
             else if(pos.h < heading){
-                fleftDrive.setVelocity(Math.abs(-DRIVE_SPEED));
-                frightDrive.setVelocity(Math.abs(-DRIVE_SPEED));
-                bleftDrive.setVelocity(Math.abs(-DRIVE_SPEED));
-                brightDrive.setVelocity(Math.abs(-DRIVE_SPEED));
+                fleftDrive.setVelocity(Math.abs(-TURN_SPEED));
+                frightDrive.setVelocity(Math.abs(-TURN_SPEED));
+                bleftDrive.setVelocity(Math.abs(-TURN_SPEED));
+                brightDrive.setVelocity(Math.abs(-TURN_SPEED));
             }
 
             telemetry.addData("ext ext_pos_h:",  pos.h);

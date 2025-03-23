@@ -35,8 +35,9 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Size;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -56,9 +57,9 @@ import java.util.Locale;
  *
  * In OnBot Java, use "Add File" to add this OpMode from the list of Samples.
  */
-@Autonomous(name = "Practicecamera", group = "Utility")
+//@Autonomous(name = "Utility: Camera Frame Capture", group = "Utility")
 
-public class Practicecamera extends LinearOpMode
+public class Practicecamra extends LinearOpMode
 {
     /*
      * EDIT THESE PARAMETERS AS NEEDED

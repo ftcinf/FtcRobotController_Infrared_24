@@ -20,7 +20,6 @@ public class OutreachRobotCode extends LinearOpMode {
 
         LeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        double speed = -gamepad1.right_stick_y / 2.0;
 
         waitForStart();
 
@@ -28,13 +27,16 @@ public class OutreachRobotCode extends LinearOpMode {
 
 
         while (opModeIsActive()) {
+            double speed = -gamepad1.right_stick_y / 2.0;
+            double Speed = -gamepad1.right_stick_x / 2.0;
+
             if (gamepad1.right_stick_y != 0.0 ) {
                 RightMotor.setPower(speed);
                 LeftMotor.setPower(speed);
             }
             if (gamepad1.right_stick_x != 0.0){
-                RightMotor.setPower(speed);
-                LeftMotor.setPower(-speed);
+                RightMotor.setPower(Speed);
+                LeftMotor.setPower(-Speed);
             }
 
         }

@@ -27,16 +27,16 @@ public class OutreachRobotCode extends LinearOpMode {
 
 
         while (opModeIsActive()) {
-            double speed = -gamepad1.right_stick_y / 2.0;
-            double Speed = -gamepad1.right_stick_x / 2.0;
+            double speed_y = -gamepad1.right_stick_y / 2.0;
+            double speed_x = -gamepad1.right_stick_x / 2.0;
 
             if (gamepad1.right_stick_y != 0.0 ) {
-                RightMotor.setPower(speed);
-                LeftMotor.setPower(speed);
+                RightMotor.setPower(speed_y);
+                LeftMotor.setPower(speed_y);
             }
             if (gamepad1.right_stick_x != 0.0){
-                RightMotor.setPower(Speed);
-                LeftMotor.setPower(-Speed);
+                RightMotor.setPower(speed_x);
+                LeftMotor.setPower(-speed_x);
             }
 
         }
